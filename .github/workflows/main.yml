@@ -1,0 +1,23 @@
+name: farm-infra
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    uses: ./.github/workflows/validate.yml
+    secrets: inherit
+
+  plan:
+    uses: ./.github/workflows/plan.yml
+    needs: validate
+    secrets: inherit
+
+  apply:
+    uses: ./.github/workflows/apply.yml
+    needs: validate
+    secrets: inherit
+    with:
+      environment: test

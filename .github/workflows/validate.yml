@@ -1,0 +1,25 @@
+name: farm-infra-validate
+on:
+  workflow_call:
+
+jobs:
+  terraform_cluster:
+    name: Validate Terraform Files
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_bucket: ${{ secrets.TF_VAR_BUCKET }}
+      TF_VAR_region: ${{ secrets.TF_VAR_REGION }}
+      TF_VAR_key: ${{ secrets.TF_VAR_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.6
+
+      - run: terraform init
+
+      - run: terraform validate
